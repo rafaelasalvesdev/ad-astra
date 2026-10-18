@@ -1,0 +1,22 @@
+{
+  "name": "ad-astra-v0.1",
+  "version": "1.0.0",
+  "description": "writer's companion",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^44.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafaelasalvesdev/ad-astra.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/rafaelasalvesdev/ad-astra/issues"
+  },
+  "homepage": "https://github.com/rafaelasalvesdev/ad-astra#readme"
+}

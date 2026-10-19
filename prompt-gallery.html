@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ad Astra — Prompt Gallery</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/prompt-gallery.css">
+</head>
+<body>
+    <div class="app">
+        <div id="sidebar-container"></div>
+        
+        <main>
+            <header class="ban">
+                <h1>Prompt Gallery</h1>
+                <p>A visual dictionary of prompts. Save one, then reuse it with any character.</p>
+            </header>
+            <div class="bar">
+                <button class="btn pri" id="btn-add-prompt">+ Add prompt</button>
+            </div>
+            <div id="grid" class="grid"></div>
+
+            <!-- Add Prompt Modal -->
+            <dialog id="dEdit">
+                <form id="fEdit" class="dp">
+                    <h2>Add New Prompt</h2>
+                    <div class="f">
+                        <label>Title</label>
+                        <input class="in" id="et" required placeholder="e.g. Cyberpunk City Street">
+                    </div>
+                    <div class="f">
+                        <label>Prompt</label>
+                        <textarea class="in" id="ep" rows="4" required placeholder="Describe the scene..."></textarea>
+                    </div>
+                    <div class="f">
+                        <label>Reference Image</label>
+                        <input type="file" id="ef" accept="image/*">
+                    </div>
+                    <div class="act">
+                        <button type="button" class="btn sec" id="btn-cancel">Cancel</button>
+                        <button type="submit" class="btn pri">Save Prompt</button>
+                    </div>
+                </form>
+            </dialog>
+        </main>
+    </div>
+    
+    <script src="js/storage.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/prompt-gallery.js"></script>
+</body>
+</html>

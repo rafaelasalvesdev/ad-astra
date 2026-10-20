@@ -8,14 +8,47 @@
 </head>
 <body>
     <div class="app">
-        <!-- The sidebar will be injected here automatically by JavaScript -->
+        <!-- Sidebar injected via JS -->
         <div id="sidebar-container"></div>
         
-        <main>
-            <h1>Welcome to Ad Astra, Writer.</h1>
-            <!-- Dashboard widgets go here -->
+        <main class="dashboard-main">
+            <!-- Greeting Banner -->
+            <header class="greeting-banner">
+                <h1 id="greeting">Good afternoon, writer.</h1>
+                <p>A calm mind writes deeply.</p>
+            </header>
+
+            <div class="dashboard-grid">
+                <!-- Git-style Stats -->
+                <section class="widget">
+                    <h2>Writing Stats</h2>
+                    <div class="git-graph" id="git-graph"></div>
+                </section>
+
+                <!-- Chapter Preview -->
+                <section class="widget">
+                    <h2>Chapter Preview</h2>
+                    <div class="chapter-card">
+                        <div class="chapter-thumb"></div>
+                        <div class="chapter-info">
+                            <h3>Chapter 7</h3>
+                            <p class="mut">The Quiet Shore</p>
+                            <progress value="75" max="100"></progress>
+                            <p class="mut" style="font-size: 11px; margin-top: 4px;">2,134 / 3,000 words</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- To-Do List -->
+                <section class="widget">
+                    <h2>Todo List</h2>
+                    <div id="todo-list" class="todo-list"></div>
+                    <input type="text" id="new-todo" class="in" placeholder="+ Add task and press Enter...">
+                </section>
+            </div>
         </main>
     </div>
+    
     <script src="js/storage.js"></script>
     <script src="js/sidebar.js"></script>
     <script src="js/dashboard.js"></script>

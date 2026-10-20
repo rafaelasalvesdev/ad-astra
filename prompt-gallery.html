@@ -2,49 +2,168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ad Astra — Prompt Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/prompt-gallery.css">
 </head>
 <body>
-    <div class="app">
-        <div id="sidebar-container"></div>
-        
-        <main>
-            <header class="ban">
-                <h1>Prompt Gallery</h1>
-                <p>A visual dictionary of prompts. Save one, then reuse it with any character.</p>
-            </header>
-            <div class="bar">
-                <button class="btn pri" id="btn-add-prompt">+ Add prompt</button>
-            </div>
-            <div id="grid" class="grid"></div>
+    <!-- Hidden SVG definitions for the pixel-art pine trees -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <path id="half" d="M36 0h2v6h4v6h4v6h4v4h-6v6h6v6h6v6h4v4h-8v6h8v6h6v6h6v6h6v4h-14H36" stroke="#6a4458" stroke-width="1.2"/>
+            <symbol id="pine" viewBox="0 0 72 90">
+                <rect x="32" y="72" width="8" height="18" fill="#9a6470" stroke="#6a4458" stroke-width="1.2"/>
+                <use href="#half" fill="#aac6ae" transform="translate(72 0) scale(-1 1)"/>
+                <use href="#half" fill="#86a897"/>
+            </symbol>
+        </defs>
+    </svg>
 
-            <!-- Add Prompt Modal -->
-            <dialog id="dEdit">
-                <form id="fEdit" class="dp">
-                    <h2>Add New Prompt</h2>
+    <div class="app">
+        <!-- Sidebar injected via js/sidebar.js -->
+        <div id="sidebar-container"></div>
+
+        <main>
+            <!-- Top Banner -->
+            <header class="ban">
+                <svg viewBox="0 0 1000 150" preserveAspectRatio="xMidYMax slice" shape-rendering="crispEdges" aria-hidden="true">
+                    <g fill="#f1efdf"><rect x="230" y="40" width="190" height="30"/><rect x="600" y="30" width="200" height="40"/></g>
+                    <use href="#pine" x="30" y="24" width="88" height="110"/>
+                    <use href="#pine" x="104" y="54" width="64" height="80"/>
+                    <use href="#pine" x="840" y="54" width="64" height="80"/>
+                    <use href="#pine" x="896" y="14" width="96" height="120"/>
+                    <rect y="120" width="1000" height="8" fill="#7ea17a"/>
+                    <rect y="128" width="1000" height="22" fill="#b27d87"/>
+                </svg>
+                <div>
+                    <h1>Prompt Gallery</h1>
+                    <p>A visual dictionary of prompts. Save your favorite scenes and reference art in one place.</p>
+                </div>
+            </header>
+
+            <!-- Primary Category Bar & Add Button -->
+            <div class="bar">
+                <div class="seg" id="prim" role="group" aria-label="Category"></div>
+                <button type="button" class="btn pri" data-act="add">+ Add prompt</button>
+            </div>
+
+            <!-- Search Bar, Sub-tag Filter Chips, & Manage Tags Button -->
+            <div class="fl">
+                <input id="q" class="in" type="search" placeholder="Search prompts…" aria-label="Search prompts">
+                <div class="chips" id="tagbar" role="group" aria-label="Filter by tag"></div>
+                <button type="button" class="btn sec sm" data-act="mng">Manage tags</button>
+            </div>
+
+            <!-- Prompt Cards Grid -->
+            <div id="grid" class="grid"></div>
+            <div id="empty" hidden style="text-align:center;padding:40px 0"></div>
+        </main>
+    </div>
+
+    <!-- MODAL 1: Add / Edit Prompt (Title & Character Swap Removed) -->
+    <dialog id="dEdit" aria-labelledby="eh">
+        <form id="fEdit" class="dp">
+            <h2 id="eh">Add prompt</h2>
+            <div class="cols">
+                <div class="f">
+                    <label for="ef">Example image</label>
+                    <input class="vh" id="ef" type="file" accept="image/*">
+                    <label class="drop" for="ef" id="prev"></label>
+                </div>
+                <div>
+                    <fieldset class="f">
+                        <legend>Category</legend>
+                        <div class="rads">
+                            <label class="rad"><input class="vh" type="radio" name="pr" value="male"><span>male</span></label>
+                            <label class="rad"><input class="vh" type="radio" name="pr" value="female" checked><span>female</span></label>
+                            <label class="rad"><input class="vh" type="radio" name="pr" value="couple"><span>couple</span></label>
+                            <label class="rad"><input class="vh" type="radio" name="pr" value="group"><span>group</span></label>
+                        </div>
+                    </fieldset>
                     <div class="f">
-                        <label>Title</label>
-                        <input class="in" id="et" required placeholder="e.g. Cyberpunk City Street">
+                        <label for="ep">Prompt</label>
+                        <textarea class="in" id="ep" rows="6" placeholder="Describe the scene, lighting, pose, and style..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <fieldset class="f">
+                <legend>Tags</legend>
+                <div class="fl" id="etags"></div>
+                <div class="fl">
+                    <input class="in" id="nt" style="max-width:220px" placeholder="New tag…" aria-label="New tag name">
+                    <button type="button" class="btn sec sm" data-act="newtag">Add tag</button>
+                </div>
+            </fieldset>
+            <div class="act">
+                <button type="button" class="btn sec" id="del" data-act="del" hidden>Delete</button>
+                <button type="button" class="btn sec" data-act="close">Cancel</button>
+                <button class="btn pri" type="submit">Save prompt</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- MODAL 2: Expand / View Prompt -->
+    <dialog id="dView" aria-label="Prompt details">
+        <div class="dp">
+            <div class="cols">
+                <img class="vimg" id="vi" alt="Prompt reference image">
+                <div>
+                    <div class="fl" style="margin-bottom:14px">
+                        <span class="badge b-male" id="vb" style="position:static"></span>
+                        <span class="tg" id="vg"></span>
                     </div>
                     <div class="f">
                         <label>Prompt</label>
-                        <textarea class="in" id="ep" rows="4" required placeholder="Describe the scene..."></textarea>
+                        <div class="pbox" id="vp"></div>
+                    </div>
+                    <div class="act" style="justify-content:flex-start; margin-top:18px;">
+                        <button type="button" class="btn pri" data-act="vcopy">Copy prompt</button>
+                        <button type="button" class="btn sec" data-act="vedit">Edit</button>
+                        <button type="button" class="btn sec" data-act="close">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- MODAL 3: Manage Tags & Color Wheel -->
+    <dialog id="dTags" aria-labelledby="th">
+        <div class="dp">
+            <h2 id="th">Manage tags</h2>
+            <div class="cols tmc">
+                <div>
+                    <form id="fTag" class="fl" style="margin-bottom:14px">
+                        <input class="in" id="tn" style="flex:1" placeholder="Add a new tag…" aria-label="New tag name">
+                        <button type="submit" class="btn pri sm">Add</button>
+                    </form>
+                    <ul id="tl"></ul>
+                    <p class="mut">Renaming or deleting a tag updates every prompt that uses it. A tag's color shows only on its border.</p>
+                </div>
+                <div class="wp">
+                    <span class="mut" id="wl">Pick a tag to set its color</span>
+                    <div class="wheel" id="wh"><i id="wk"></i></div>
+                    <div class="f">
+                        <label for="wlt">Lightness</label>
+                        <input id="wlt" type="range" min="25" max="75" value="50">
                     </div>
                     <div class="f">
-                        <label>Reference Image</label>
-                        <input type="file" id="ef" accept="image/*">
+                        <label for="hx">Hex color</label>
+                        <input class="in" id="hx" maxlength="7" style="max-width:140px;text-align:center" placeholder="#4f7f70">
                     </div>
-                    <div class="act">
-                        <button type="button" class="btn sec" id="btn-cancel">Cancel</button>
-                        <button type="submit" class="btn pri">Save Prompt</button>
-                    </div>
-                </form>
-            </dialog>
-        </main>
-    </div>
-    
+                    <span class="tag" id="wv">Preview</span>
+                </div>
+            </div>
+            <div class="act">
+                <button type="button" class="btn sec" data-act="close">Done</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Notification Toast -->
+    <div id="toast" role="status" aria-live="polite"></div>
+
     <script src="js/storage.js"></script>
     <script src="js/sidebar.js"></script>
     <script src="js/prompt-gallery.js"></script>

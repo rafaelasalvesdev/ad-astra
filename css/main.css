@@ -1,35 +1,40 @@
 /* css/main.css */
 
 :root {
-    --bg: #cfe1d8;
-    --side: #b5d1c6;
-    --card: #f7f0e1;
-    --line: #e3d8c2;
-    --ink: #0f2f2c;
-    --mut: #4f6a65;
-    --sage: #7aa08f;
+    /* Dark forest aesthetic variables (matching your screenshots) */
+    --bg: #18231f;
+    --side: #1f2e2a;
+    --card: #25332f;
+    --line: #34453f;
+    --ink: #e8f0ea;
+    --mut: #a7bdb5;
+    --sage: #8fb8a6;
     --acc: #cf3f38;
-    --chip: #e7efe6;
-    --on: #4f7f70;
-    --onT: #fff;
-    --field: #fffaf0;
+    --chip: #2d3f39;
+    --on: #8fb8a6;
+    --onT: #0f2f2c;
+    --field: #1d2925;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
     background: var(--bg);
     color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font: 400 13px/1.5 'JetBrains Mono', ui-monospace, Menlo, monospace;
 }
 
-/* Application Grid */
+/* Main App Grid */
 .app {
     display: grid;
     grid-template-columns: 220px minmax(0, 1fr);
     min-height: 100vh;
 }
 
-/* Sidebar Styles */
+/* Sidebar Navigation */
 .side {
     background: var(--side);
     padding: 22px 14px;
@@ -43,7 +48,7 @@ body {
     align-items: center;
     gap: 10px;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 15px;
     padding: 0 6px 14px;
 }
 
@@ -57,13 +62,9 @@ body {
     color: var(--ink);
     text-decoration: none;
     font-weight: 500;
-    transition: background 0.2s;
 }
 
-.n.on {
-    background: var(--card);
-}
-
+.n.on,
 .n:hover {
     background: var(--card);
 }
